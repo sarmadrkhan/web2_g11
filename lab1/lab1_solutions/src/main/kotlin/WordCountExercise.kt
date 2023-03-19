@@ -6,7 +6,14 @@ fun countWords(phrase: String): Map<String, Int> {
     val counts = mutableMapOf<String, Int>()
     for (word in words) {
         if (word.isNotEmpty()) {
-            counts[word] = counts.getOrDefault(word, 0) + 1
+            var cleanedWord = word
+            if (cleanedWord.startsWith("'")) {
+                cleanedWord = cleanedWord.substring(1)
+            }
+            if (cleanedWord.endsWith("'")) {
+                cleanedWord = cleanedWord.substring(0, cleanedWord.length - 1)
+            }
+            counts[cleanedWord] = counts.getOrDefault(cleanedWord, 0) + 1
         }
     }
     return counts

@@ -1,0 +1,22 @@
+# Compiled files
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Gradle files
+.gradle/
+build/
+
+# Other
+.DS_Store
+Thumbs.db
