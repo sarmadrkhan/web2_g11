@@ -10,12 +10,10 @@ CREATE TABLE IF NOT EXISTS profiles
 (
     email      VARCHAR(20) NOT NULL PRIMARY KEY,
     first_name VARCHAR(20) NOT NULL,
-    last_name  VARCHAR(20) NOT NULL,
-    password   VARCHAR(20) NOT NULL,
-    salt       VARCHAR(20) NOT NULL
+    last_name  VARCHAR(20) NOT NULL
 );
 
-INSERT INTO profiles (email, first_name, last_name, password, salt)
-VALUES ('Johndoe@gmail.com', 'John', 'Doe', 'password', 'salt');
-INSERT INTO profiles (email, first_name, last_name, password, salt)
-VALUES ('Janedoe@gmail.com', 'Jane', 'Doe', 'password', 'salt');
+INSERT INTO profiles (email, first_name, last_name)
+VALUES ('johndoe@gmail.com', 'John', 'Doe');
+INSERT INTO profiles (email, first_name, last_name)
+VALUES ('janedoe@gmail.com', 'Jane', 'Doe');
