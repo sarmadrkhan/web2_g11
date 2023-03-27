@@ -12,6 +12,4 @@ class Profile {
 
     var firstName: String = ""
     var lastName: String = ""
-    var password: String = ""
-    var salt: String = ""
 }

@@ -3,7 +3,7 @@ package geleven.server.profiles
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class ProfileController(private val profileService: ProfileService) {
+class   ProfileController(private val profileService: ProfileService) {
 
     @GetMapping("/API/profiles/{email}")
     fun getProfile(@PathVariable email: String): ProfileDTO? {
@@ -11,7 +11,7 @@ class ProfileController(private val profileService: ProfileService) {
     }
 
     @PostMapping("/API/profiles")
-    fun createProfile(@RequestBody profile: Profile): String? {
+    fun createProfile(@RequestBody profile: Profile): ProfileDTO? {
         return profileService.createProfile(profile)
     }
 
@@ -19,7 +19,7 @@ class ProfileController(private val profileService: ProfileService) {
     fun updateProfile(
         @PathVariable email: String,
         @RequestBody profile: Profile
-    ): String? {
+    ): ProfileDTO? {
         return profileService.updateProfile(email, profile)
     }
 }
