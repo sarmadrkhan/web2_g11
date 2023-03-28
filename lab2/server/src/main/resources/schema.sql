@@ -4,7 +4,14 @@ create table if not exists products(
     name varchar(255),
     brand varchar(255)
 );
-
+INSERT INTO  products (ean, name, brand)
+VALUES (4935531465706,'product 1', 'brand 1');
+INSERT INTO  products (ean, name, brand)
+VALUES (4935531465707,'product 2', 'brand 2');
+INSERT INTO  products (ean, name, brand)
+VALUES (4935531465708,'product 3', 'brand 3');
+INSERT INTO  products (ean, name, brand)
+VALUES (4935531465709,'product 4', 'brand 4');
 DROP TABLE IF EXISTS profiles;
 CREATE TABLE IF NOT EXISTS profiles
 (
