@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { Form, Button, Col, Row, Alert, ListGroup } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import API from "./API";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [profile, setProfile] = useState(null);
-
+  const [formData, setFormData] = useState({});
+  const [createSuccess, setCreateSuccess] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   useEffect(() => {
     // fetch all products on component mount
     API.getAllProducts().then((data) => setProducts(data));
@@ -28,33 +33,40 @@ function App() {
   const handleProfileCreate = (profileData) => {
     // create new user profile
     API.createProfile(profileData)
-      .then((data) => setProfile(data))
+      .then((data) => {
+        setProfile(data);
+        setCreateSuccess(true);
+        setTimeout(() => setCreateSuccess(false), 5000);
+      })
       .catch((error) => console.log(error));
   };
 
-  const handleProfileUpdate = (email, profileData) => {
+  const handleProfileUpdate = (profileData) => {
     // update existing user profile
-    API.updateProfile(email, profileData)
+    API.updateProfile(profileData)
       .then((data) => {
-        console.log(data);
         setProfile(data);
+        setUpdateSuccess(true);
+        setTimeout(() => setUpdateSuccess(false), 5000);
       })
       .catch((error) => console.log(error));
   };
 
   return (
     <div className="App">
-      <h1>Product List</h1>
-      <ul>
+      <h3>Product List</h3>
+      <ListGroup>
         {products.map((product) => (
-          <li
-            key={product.ean}
-            onClick={() => handleProductSelect(product.ean)}
-          >
-            {product.name}
-          </li>
+          <ListGroup.Item key={product.ean}>
+            <Button
+              onClick={() => handleProductSelect(product.ean)}
+              variant="outline-primary"
+            >
+              {product.name}
+            </Button>
+          </ListGroup.Item>
         ))}
-      </ul>
+      </ListGroup>
 
       {selectedProduct && (
         <div>
@@ -64,7 +76,7 @@ function App() {
         </div>
       )}
 
-      <h1>User Profile</h1>
+      <h3>User Profile</h3>
       {profile ? (
         <div>
           <p>
@@ -75,50 +87,89 @@ function App() {
       ) : (
         <div>
           <p>No profile found.</p>
-          <button onClick={() => handleProfileFetch()}>
+          <Button onClick={() => handleProfileFetch()}>
             Load John Doe's Profile
-          </button>
+          </Button>
         </div>
       )}
 
-      <h1>Create or Update Profile</h1>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <label>
-          Name:
-          <input type="text" name="first" />
-        </label>
-        <label>
-          LastName:
-          <input type="text" name="last" />
-        </label>
+      <h3>Create or Update Profile</h3>
+      <Form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <Row>
+          <Col>
+            <Form.Label>First Name:</Form.Label>
+            <Form.Control
+              type="text"
+              name="first"
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
+            />
+          </Col>
+          <Col>
+            <Form.Label>Last Name:</Form.Label>
+            <Form.Control
+              type="text"
+              name="last"
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Form.Label>Email:</Form.Label>
+            <Form.Control
+              type="email"
+              name="email"
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+            />
+          </Col>
+        </Row>
         <br />
-        <label>
-          Email:
-          <input type="email" name="email" />
-        </label>
-        <br />
-        <button
-          onClick={() =>
-            handleProfileCreate({
-              firstName: "Alice",
-              lastName: "Doe",
-              email: "alice@example.com",
-            })
-          }
+        <Button
+          variant="primary"
+          onClick={() => {
+            handleProfileCreate(formData);
+          }}
         >
           Create Profile
-        </button>
-        <button
-          onClick={() =>
-            handleProfileUpdate("johndoe@gmail.com", {
-              firstName: "sarmad",
-              lastName: "khan",
-            })
-          }
+        </Button>
+        &nbsp;
+        <Button
+          variant="primary"
+          onClick={() => {
+            handleProfileUpdate(formData);
+          }}
         >
           Update Profile
-        </button>
-      </form>
+        </Button>
+        {createSuccess && (
+          <Alert
+            variant="success"
+            onClose={() => setCreateSuccess(false)}
+            dismissible
+          >
+            Profile created successfully!
+          </Alert>
+        )}
+        {updateSuccess && (
+          <Alert
+            variant="success"
+            onClose={() => setUpdateSuccess(false)}
+            dismissible
+          >
+            Profile updated successfully!
+          </Alert>
+        )}
+      </Form>
     </div>
   );
 }

@@ -47,8 +47,8 @@ const API = {
     return data;
   },
 
-  updateProfile: async (email, profileData) => {
-    const response = await fetch(`${API_URL}/profiles/${email}`, {
+  updateProfile: async (profileData) => {
+    const response = await fetch(`${API_URL}/profiles/${profileData.email}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
