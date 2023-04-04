@@ -1,35 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Col, Row, Alert, Container } from "react-bootstrap";
+import { Alert, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import API from "./API";
 import ProductTable from "./components/ProductTable";
-import Profile from "./components/Profile";
+import UserProfile from "./components/UserProfile";
+import CreateUpdateProfile from "./components/CreateUpdateProfile";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [formData, setFormData] = useState({});
   const [createSuccess, setCreateSuccess] = useState(false);
   const [updateSuccess, setUpdateSuccess] = useState(false);
   useEffect(() => {
     // fetch all products on component mount
-    API.getAllProducts().then((data) => setProducts(data));
+    API.getAllProducts()
+      .then((data) => setProducts(data))
+      .catch((error) => {
+        console.error("Error Fetching Products:", error);
+      });
   }, []);
 
   const handleProductSelect = (productId) => {
     // fetch selected product details
     API.getProduct(productId)
       .then((data) => setSelectedProduct(data))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const handleProfileFetch = (email) => {
     // fetch user profile details
-    API.getProfile("johndoe@gmail.com")
+    API.getProfile(email)
       .then((data) => setProfile(data))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const handleProfileCreate = (profileData) => {
@@ -40,7 +44,7 @@ function App() {
         setCreateSuccess(true);
         setTimeout(() => setCreateSuccess(false), 5000);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   const handleProfileUpdate = (profileData) => {
@@ -51,7 +55,7 @@ function App() {
         setUpdateSuccess(true);
         setTimeout(() => setUpdateSuccess(false), 5000);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -61,6 +65,8 @@ function App() {
         handleProductSelect={handleProductSelect}
         selectedProduct={selectedProduct}
       />
+
+      <UserProfile handleProfileFetch={handleProfileFetch} profile={profile} />
       {createSuccess && (
         <Alert
           variant="success"
@@ -79,83 +85,11 @@ function App() {
           Profile updated successfully!
         </Alert>
       )}
-      <Profile />
-      <h3>User Profile</h3>
-      {profile ? (
-        <div>
-          <p>
-            Name: {profile.firstName} {profile.lastName}
-          </p>
-          <p>Email: {profile.email}</p>
-        </div>
-      ) : (
-        <div>
-          <p>No profile found.</p>
-          <Button onClick={() => handleProfileFetch()}>
-            Load John Doe's Profile
-          </Button>
-        </div>
-      )}
 
-      <h3>Create or Update Profile</h3>
-      <Form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <Row>
-          <Col>
-            <Form.Label>First Name:</Form.Label>
-            <Form.Control
-              type="text"
-              name="first"
-              onChange={(e) =>
-                setFormData({ ...formData, firstName: e.target.value })
-              }
-            />
-          </Col>
-          <Col>
-            <Form.Label>Last Name:</Form.Label>
-            <Form.Control
-              type="text"
-              name="last"
-              onChange={(e) =>
-                setFormData({ ...formData, lastName: e.target.value })
-              }
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Form.Label>Email:</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-            />
-          </Col>
-        </Row>
-        <br />
-        <Button
-          variant="primary"
-          onClick={() => {
-            handleProfileCreate(formData);
-          }}
-        >
-          Create Profile
-        </Button>
-        &nbsp;
-        <Button
-          variant="primary"
-          onClick={() => {
-            handleProfileUpdate(formData);
-          }}
-        >
-          Update Profile
-        </Button>
-      </Form>
+      <CreateUpdateProfile
+        handleProfileCreate={handleProfileCreate}
+        handleProfileUpdate={handleProfileUpdate}
+      />
     </Container>
   );
 }

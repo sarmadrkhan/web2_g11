@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Table } from "react-bootstrap";
+import { Button, Col, Row, Table } from "react-bootstrap";
 
 const ProductTable = (props) => {
   return (
@@ -39,17 +39,24 @@ const ProductRow = (props) => {
       <td>{props.product.name}</td>
       <td>
         {showDetails && (
-          <div className="border rounded">
-            <p>
-              <strong>Product Details</strong>
-              <br />
-              <strong>EAN:</strong> {props.product.ean}
-              <br />
-              <strong>Name:</strong> {props.product.name}
-              <br />
-              <strong>Brand:</strong> {props.product.brand}
-            </p>
-            <Button onClick={toggleDetails}>Hide Details</Button>
+          <div>
+            <Row>
+              <Col>
+                <strong>EAN: </strong>
+                {props.product.ean}
+              </Col>
+              <Col>
+                <strong>Brand: </strong>
+                {props.product.brand}
+              </Col>
+              <Col>
+                {showDetails && (
+                  <Button variant="danger" onClick={toggleDetails}>
+                    Hide Details
+                  </Button>
+                )}
+              </Col>
+            </Row>
           </div>
         )}
         {!showDetails && <Button onClick={toggleDetails}>Show Details</Button>}
