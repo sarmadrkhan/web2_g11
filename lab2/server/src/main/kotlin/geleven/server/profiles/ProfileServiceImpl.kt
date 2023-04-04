@@ -14,9 +14,9 @@ class ProfileServiceImpl(private val profileRepository: ProfileRepository) :
         return profileRepository.save(profile).toDTO()
     }
 
-    override fun updateProfile(email: String, profile: Profile): ProfileDTO? {
+    override fun updateProfile(profile: Profile): ProfileDTO? {
         val profileRep = profileRepository.findAll()
-        val profileToUpdate = profileRep.find { it.email == email }
+        val profileToUpdate = profileRep.find { it.email == profile.email }
         profileToUpdate?.let {
             it.firstName = profile.firstName
             it.lastName = profile.lastName
