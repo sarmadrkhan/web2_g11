@@ -31,7 +31,7 @@ const API = {
   },
 
   createProfile: async (profileData) => {
-    const response = await fetch(`${API_URL}/profiles`, {
+    const response = await fetch(`${API_URL}/profiles/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

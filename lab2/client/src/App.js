@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Col, Row, Alert, ListGroup } from "react-bootstrap";
+import { Form, Button, Col, Row, Alert, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import API from "./API";
+import ProductTable from "./components/ProductTable";
+import Profile from "./components/Profile";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -53,29 +55,31 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h3>Product List</h3>
-      <ListGroup>
-        {products.map((product) => (
-          <ListGroup.Item key={product.ean}>
-            <Button
-              onClick={() => handleProductSelect(product.ean)}
-              variant="outline-primary"
-            >
-              {product.name}
-            </Button>
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
-
-      {selectedProduct && (
-        <div>
-          <h2>EAN: {selectedProduct.ean}</h2>
-          <p>Name: {selectedProduct.name}</p>
-          <p>Brand: {selectedProduct.brand}</p>
-        </div>
+    <Container className="App">
+      <ProductTable
+        products={products}
+        handleProductSelect={handleProductSelect}
+        selectedProduct={selectedProduct}
+      />
+      {createSuccess && (
+        <Alert
+          variant="success"
+          onClose={() => setCreateSuccess(false)}
+          dismissible
+        >
+          Profile created successfully!
+        </Alert>
       )}
-
+      {updateSuccess && (
+        <Alert
+          variant="success"
+          onClose={() => setUpdateSuccess(false)}
+          dismissible
+        >
+          Profile updated successfully!
+        </Alert>
+      )}
+      <Profile />
       <h3>User Profile</h3>
       {profile ? (
         <div>
@@ -151,26 +155,8 @@ function App() {
         >
           Update Profile
         </Button>
-        {createSuccess && (
-          <Alert
-            variant="success"
-            onClose={() => setCreateSuccess(false)}
-            dismissible
-          >
-            Profile created successfully!
-          </Alert>
-        )}
-        {updateSuccess && (
-          <Alert
-            variant="success"
-            onClose={() => setUpdateSuccess(false)}
-            dismissible
-          >
-            Profile updated successfully!
-          </Alert>
-        )}
       </Form>
-    </div>
+    </Container>
   );
 }
 
