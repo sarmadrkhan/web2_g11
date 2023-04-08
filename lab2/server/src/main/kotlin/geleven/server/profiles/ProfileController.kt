@@ -2,6 +2,8 @@ package geleven.server.profiles
 
 import geleven.server.utils.DuplicateException
 import geleven.server.utils.NotFoundException
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -14,14 +16,16 @@ class   ProfileController(private val profileService: ProfileService) {
     }
 
     @PostMapping("/API/profiles/")
-    fun createProfile(@RequestBody profile: Profile): ProfileDTO? {
+    fun createProfile(@RequestBody profile: Profile): ResponseEntity<ProfileDTO> {
         if (profileService.getProfile(profile.email) != null) {
             throw DuplicateException("Profile with email '${profile.email}' already exists")
         }
-        return profileService.createProfile(profile)
+        val createdProfile = profileService.createProfile(profile)
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProfile)
     }
 
     @PutMapping("/API/profiles/{email}")
+    @ResponseStatus(HttpStatus.OK)
     fun updateProfile(
         @PathVariable email: String,
         @RequestBody profile: Profile
