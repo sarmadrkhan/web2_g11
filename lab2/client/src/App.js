@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert, Container } from "react-bootstrap";
+import { Alert, Container, Row } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import API from "./API";
@@ -11,8 +11,8 @@ function App() {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [createSuccess, setCreateSuccess] = useState(false);
-  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [alert, setAlert] = useState(null);
+
   useEffect(() => {
     // fetch all products on component mount
     API.getAllProducts()
@@ -26,14 +26,28 @@ function App() {
     // fetch selected product details
     API.getProduct(productId)
       .then((data) => setSelectedProduct(data))
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        setAlert({
+          message: "Failed to fetch product",
+          type: "danger",
+        });
+        setTimeout(() => setAlert(null), 5000);
+        console.error(error);
+      });
   };
 
   const handleProfileFetch = (email) => {
     // fetch user profile details
     API.getProfile(email)
       .then((data) => setProfile(data))
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        setAlert({
+          message: "Failed to fetch profile",
+          type: "danger",
+        });
+        setTimeout(() => setAlert(null), 5000);
+        console.error(error);
+      });
   };
 
   const handleProfileCreate = (profileData) => {
@@ -41,10 +55,20 @@ function App() {
     API.createProfile(profileData)
       .then((data) => {
         setProfile(data);
-        setCreateSuccess(true);
-        setTimeout(() => setCreateSuccess(false), 5000);
+        setAlert({
+          message: "Profile created successfully!",
+          type: "success",
+        });
+        setTimeout(() => setAlert(null), 5000);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        setAlert({
+          message: "Failed to create profile",
+          type: "danger",
+        });
+        setTimeout(() => setAlert(null), 5000);
+        console.error(error);
+      });
   };
 
   const handleProfileUpdate = (profileData) => {
@@ -52,44 +76,53 @@ function App() {
     API.updateProfile(profileData)
       .then((data) => {
         setProfile(data);
-        setUpdateSuccess(true);
-        setTimeout(() => setUpdateSuccess(false), 5000);
+        setAlert({
+          message: "Profile updated successfully!",
+          type: "success",
+        });
+        setTimeout(() => setAlert(null), 5000);
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        setAlert({
+          message: "Failed to update profile",
+          type: "danger",
+        });
+        setTimeout(() => setAlert(null), 5000);
+        console.error(error);
+      });
   };
 
   return (
     <Container className="App">
-      <ProductTable
-        products={products}
-        handleProductSelect={handleProductSelect}
-        selectedProduct={selectedProduct}
-      />
-
-      <UserProfile handleProfileFetch={handleProfileFetch} profile={profile} />
-      {createSuccess && (
+      {alert && (
         <Alert
-          variant="success"
-          onClose={() => setCreateSuccess(false)}
+          variant={alert.type}
+          onClose={() => setAlert(null)}
           dismissible
+          className="fixed-top"
         >
-          Profile created successfully!
+          {alert.message}
         </Alert>
       )}
-      {updateSuccess && (
-        <Alert
-          variant="success"
-          onClose={() => setUpdateSuccess(false)}
-          dismissible
-        >
-          Profile updated successfully!
-        </Alert>
-      )}
-
-      <CreateUpdateProfile
-        handleProfileCreate={handleProfileCreate}
-        handleProfileUpdate={handleProfileUpdate}
-      />
+      <Row>
+        <ProductTable
+          products={products}
+          handleProductSelect={handleProductSelect}
+          selectedProduct={selectedProduct}
+        />
+      </Row>
+      <Row>
+        <UserProfile
+          handleProfileFetch={handleProfileFetch}
+          profile={profile}
+        />
+      </Row>
+      <Row>
+        <CreateUpdateProfile
+          handleProfileCreate={handleProfileCreate}
+          handleProfileUpdate={handleProfileUpdate}
+        />
+      </Row>
     </Container>
   );
 }

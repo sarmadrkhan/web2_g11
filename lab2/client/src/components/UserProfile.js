@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 const UserProfile = (props) => {
   const [email, setEmail] = useState("");
-
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
@@ -18,7 +17,7 @@ const UserProfile = (props) => {
   };
 
   return (
-    <div className="container mt-5 mb-5">
+    <Container className="mt-5 mb-5">
       <Row style={{ justifyContent: "space-between" }}>
         <Col md={6}>
           <h3>User Profile</h3>
@@ -62,7 +61,7 @@ const UserProfile = (props) => {
           )}
         </Col>
       </Row>
-    </div>
+    </Container>
   );
 };
 

@@ -31,6 +31,9 @@ const ProductRow = (props) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const toggleDetails = () => {
+    if (!showDetails) {
+      props.handleProductSelect(props.product.ean);
+    }
     setShowDetails(!showDetails);
   };
 
