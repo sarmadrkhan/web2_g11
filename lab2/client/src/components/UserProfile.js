@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-
+import "../App.css";
 const UserProfile = (props) => {
   const [email, setEmail] = useState("");
   const handleEmailChange = (e) => {
@@ -18,8 +18,8 @@ const UserProfile = (props) => {
 
   return (
     <Container className="mt-5 mb-5">
-      <Row style={{ justifyContent: "space-between" }}>
-        <Col md={6}>
+      <Row>
+        <Col>
           <h3>User Profile</h3>
           <p>Enter an existing email address:</p>
           <Form onSubmit={handleSubmit}>
@@ -37,31 +37,38 @@ const UserProfile = (props) => {
             </Button>
           </Form>
         </Col>
-        <Col md={6} style={{ backgroundColor: "#DCDCDC", borderRadius: "5px" }}>
-          {props.profile ? (
-            <div>
-              <h4>Profile Details</h4>
-              <h5>
-                {props.profile.firstName} {props.profile.lastName}
-              </h5>
-              <p>
-                First Name: {props.profile.firstName}
-                <br />
-                Last Name: {props.profile.lastName}
-                <br />
-                Email: {props.profile.email}
-                <br />
-              </p>
-            </div>
-          ) : (
-            <div>
-              <h4>Profile Details</h4>
-              <p>No profile found.</p>
-            </div>
-          )}
+        <Col>
+          <ProfileData profile={props.profile} />
         </Col>
       </Row>
     </Container>
+  );
+};
+
+const ProfileData = (props) => {
+  return (
+    <>
+      {props.profile && (
+        <Row className="profile-data">
+          <Row>
+            <h4>Profile Details</h4>
+            <h5>
+              {props.profile.firstName} {props.profile.lastName}
+            </h5>
+          </Row>
+          <Row>
+            <p>
+              First Name: {props.profile.firstName}
+              <br />
+              Last Name: {props.profile.lastName}
+              <br />
+              Email: {props.profile.email}
+              <br />
+            </p>
+          </Row>
+        </Row>
+      )}
+    </>
   );
 };
 
