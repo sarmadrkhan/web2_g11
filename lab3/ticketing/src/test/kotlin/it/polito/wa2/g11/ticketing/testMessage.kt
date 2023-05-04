@@ -138,7 +138,7 @@ class MessageControllerTests {
         message.content = "Hello World!"
 
         val message2 = Message()
-        message2.idChat = 2
+        message2.idChat = 1
         message2.idSender = "janedoe@gmail.com"
         message2.timestamp = LocalDateTime.of(2022, 5, 5, 11, 0)
         message2.content = "Hello World!"
@@ -153,11 +153,17 @@ class MessageControllerTests {
 
         // Then
         assertThat(response).isNotNull
-        assertThat(response).hasSize(1)
-        assertThat(response[0].mid).isEqualTo(message.mid)
-        assertThat(response[0].idChat).isEqualTo(message.idChat)
-        assertThat(response[0].idSender).isEqualTo(message.idSender)
-        assertThat(response[0].timestamp).isEqualTo(message.timestamp)
+        assertThat(response).hasSize(2)
+        assertThat(response[0].mid).isEqualTo(message2.mid)
+        assertThat(response[0].idChat).isEqualTo(message2.idChat)
+        assertThat(response[0].idSender).isEqualTo(message2.idSender)
+        assertThat(response[0].timestamp).isEqualTo(message2.timestamp)
+        assertThat(response[0].content).isEqualTo(message2.content)
+        assertThat(response[1].mid).isEqualTo(message.mid)
+        assertThat(response[1].idChat).isEqualTo(message.idChat)
+        assertThat(response[1].idSender).isEqualTo(message.idSender)
+        assertThat(response[1].timestamp).isEqualTo(message.timestamp)
+        assertThat(response[1].content).isEqualTo(message.content)
 
         messageRepository.delete(message)
         messageRepository.delete(message2)

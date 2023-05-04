@@ -42,7 +42,6 @@ class TicketControllerTests {
         }
     }
 
-
     @LocalServerPort
     private val port: Int = 8080
 
@@ -109,6 +108,7 @@ class TicketControllerTests {
         ticket.lastUpdateDate = LocalDateTime.of(2022, 5, 5, 10, 0)
         ticket.priority = 1
         ticket.status = "open"
+
         ticketRepository.save(ticket)
 
         // When
@@ -159,7 +159,7 @@ class TicketControllerTests {
         assertEquals(ticket.priority, response.priority)
         assertEquals(ticket.status, response.status)
 
-        ticketRepository.delete(ticket)
+        ticketRepository.deleteById(response.tid)
     }
 
     @Test
