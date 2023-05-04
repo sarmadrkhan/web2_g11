@@ -6,7 +6,8 @@ data class MessageDTO(
     val mid: Int,
     val idChat: Int,
     val idSender: String,
-    val timeStamp: LocalDateTime
+    val timestamp: LocalDateTime,
+    val content: String
 )
 
 fun Message.toDTO(): MessageDTO {
@@ -14,6 +15,7 @@ fun Message.toDTO(): MessageDTO {
         mid,
         idChat,
         idSender,
-        timestamp
+        timestamp,
+        content
     )
 }

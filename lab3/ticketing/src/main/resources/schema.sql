@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS Messages
     id_chat   integer     not null,
     id_sender varchar(20) not null,
     timestamp timestamp   not null,
+    content   text        not null,
     foreign key (id_sender) references profiles (email)
 );
 

@@ -5,6 +5,8 @@ interface MessageService {
 
     fun getMessage(id: Int): MessageDTO?
 
+    fun getSenderMessages(senderId: String): List<MessageDTO>
+
     fun getChatMessages(chatId: Int): List<MessageDTO>
 
     fun createMessage(message: Message): MessageDTO

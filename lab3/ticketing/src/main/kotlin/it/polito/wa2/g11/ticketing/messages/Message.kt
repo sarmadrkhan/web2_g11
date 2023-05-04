@@ -15,4 +15,5 @@ class Message {
 
     @Column(name = "timestamp", columnDefinition = "TIMESTAMP")
     var timestamp: LocalDateTime = LocalDateTime.now()
+    var content: String = ""
 }

@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface MessageRepository : JpaRepository<Message, Int> {
+    fun findByIdSender(senderId: String): List<Message>
+
     fun findByIdChat(chatId: Int): List<Message>
+
     fun deleteByIdChat(chatId: Int)
 }

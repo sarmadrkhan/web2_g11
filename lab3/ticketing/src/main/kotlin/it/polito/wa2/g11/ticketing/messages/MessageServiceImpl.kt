@@ -1,9 +1,11 @@
 package it.polito.wa2.g11.ticketing.messages
 
+import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
+@Transactional
 class MessageServiceImpl(private val messageRepository: MessageRepository) : MessageService {
     override fun getAll(): List<MessageDTO> {
         return messageRepository.findAll().map { it.toDTO() }
@@ -13,6 +15,10 @@ class MessageServiceImpl(private val messageRepository: MessageRepository) : Mes
         return messageRepository
             .findByIdOrNull(id)
             ?.toDTO()
+    }
+
+    override fun getSenderMessages(senderId: String): List<MessageDTO> {
+        return messageRepository.findByIdSender(senderId).sortedByDescending { it.timestamp }.map { it.toDTO() }
     }
 
     override fun getChatMessages(chatId: Int): List<MessageDTO> {
