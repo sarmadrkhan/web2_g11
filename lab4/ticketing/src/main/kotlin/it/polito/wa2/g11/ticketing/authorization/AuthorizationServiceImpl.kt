@@ -12,11 +12,11 @@ class AuthorizationServiceImpl : AuthorizationService {
     private val client = OkHttpClient()
     private val baseUrl = "http://keycloak:8080/realms/SpringBootKeycloak/protocol/openid-connect/token"
     private var accessToken: String? = null
-    override fun login(username: String, password: String): String {
+    override fun login(username: String, password: String): Map<String, String?> {
         val token = getToken(username, password)
         if (token != null) {
             accessToken = token
-            return token
+            return mapOf("token" to token)
         } else {
             throw Exception("Login failed")
         }
@@ -50,24 +50,6 @@ class AuthorizationServiceImpl : AuthorizationService {
             null
         }
     }
-
-//    fun sendHttpGetRequest(url: String, accessToken: String): Response? {
-//        val client = OkHttpClient()
-//
-//        val request = Request.Builder()
-//            .url(url)
-//            .header("Authorization", "Bearer $accessToken")
-//            .build()
-//        val response = client.newCall(request).execute()
-//
-//        if (response.isSuccessful) {
-//            val responseBody = response.body?.string()
-//            return response
-//        } else {
-//            println("Request failed: ${response.code}")
-//            return null
-//        }
-//    }
 
     fun extractAccessToken(responseBody: String?): String? {
         return responseBody?.let {

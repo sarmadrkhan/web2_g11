@@ -11,7 +11,7 @@ class AuthorizationController(
 ) {
     @PostMapping("/login")
     @PreAuthorize("permitAll()")
-    fun login(@RequestParam username: String, @RequestParam password: String): String {
+    fun login(@RequestParam username: String, @RequestParam password: String): Map<String, String?> {
         return authorizationService.login(username, password)
     }
 
