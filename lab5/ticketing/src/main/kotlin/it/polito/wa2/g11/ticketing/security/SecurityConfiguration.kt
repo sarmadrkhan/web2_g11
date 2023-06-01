@@ -33,6 +33,7 @@ class WebSecurityConfig(private val jwtAuthConverter: JwtAuthConverter) {
             .requestMatchers(HttpMethod.POST, "/message").hasAnyRole(EXPERT, CLIENT)
             .requestMatchers(HttpMethod.PUT, "/message/**").hasAnyRole(EXPERT, CLIENT, MANAGER)
             .requestMatchers(HttpMethod.DELETE, "/message/**").hasAnyRole(EXPERT, CLIENT, MANAGER)
+            .anyRequest().permitAll()
             .and().csrf().disable()
         http.oauth2ResourceServer()
             .jwt()

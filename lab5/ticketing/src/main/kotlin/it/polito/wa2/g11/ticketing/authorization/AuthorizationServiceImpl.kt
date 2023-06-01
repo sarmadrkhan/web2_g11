@@ -1,5 +1,6 @@
 package it.polito.wa2.g11.ticketing.authorization
 
+import io.micrometer.observation.annotation.Observed
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -33,6 +34,8 @@ class AuthorizationServiceImpl : AuthorizationService {
         .password(KEYCLOAK_PASSWORD)
         .build()
 
+
+    @Observed
     override fun login(username: String, password: String): Map<String, String?> {
         val token = getToken(username, password)
         if (token != null) {
@@ -43,16 +46,19 @@ class AuthorizationServiceImpl : AuthorizationService {
         }
     }
 
+    @Observed
     override fun logout(token: String) {
         accessToken = null
     }
 
+    @Observed
     override fun signup(username: String, password: String, email: String): Response? {
         val response = addUser(username, password, email)
         assignRoleToUser(username, "app_client")
         return Response.status(response?.status ?: 500).build()
     }
 
+    @Observed
     override fun createExpert(username: String, password: String, email: String): Response? {
         val response = addUser(username, password, email)
         assignRoleToUser(username, "app_expert")

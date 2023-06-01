@@ -11,8 +11,11 @@ import java.security.Principal
 @RequestMapping("/test")
 class TestSecurityController {
 
+    private val log = org.slf4j.LoggerFactory.getLogger(TestSecurityController::class.java)
+
     @GetMapping("/anonymous")
     fun getAnonymous(): ResponseEntity<String> {
+        log.info("Hello Anonymous")
         return ResponseEntity.ok("Hello Anonymous")
     }
 
@@ -21,6 +24,7 @@ class TestSecurityController {
         val token = principal as JwtAuthenticationToken
         val userName = token.tokenAttributes["name"]
         val userEmail = token.tokenAttributes["email"]
+        log.info("Hello Expert \nUser Name : $userName\nUser Email : $userEmail")
         return ResponseEntity.ok("Hello Expert \nUser Name : $userName\nUser Email : $userEmail")
     }
 
@@ -29,6 +33,7 @@ class TestSecurityController {
         val token = principal as JwtAuthenticationToken
         val userName = token.tokenAttributes["name"]
         val userEmail = token.tokenAttributes["email"]
+        log.info("Hello Client \nUser Name : $userName\nUser Email : $userEmail")
         return ResponseEntity.ok("Hello Client \nUser Name : $userName\nUser Email : $userEmail")
     }
 
@@ -37,6 +42,7 @@ class TestSecurityController {
         val token = principal as JwtAuthenticationToken
         val userName = token.tokenAttributes["name"]
         val userEmail = token.tokenAttributes["email"]
+        log.info("Hello Manager \nUser Name : $userName\nUser Email : $userEmail")
         return ResponseEntity.ok("Hello Manager \nUser Name : $userName\nUser Email : $userEmail")
     }
 }
